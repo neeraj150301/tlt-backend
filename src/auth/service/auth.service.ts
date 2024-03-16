@@ -31,6 +31,13 @@ export class AuthService {
     if (!isPasswordMatched) {
       throw new UnauthorizedException('Incorrect pin or password');
     }
+      // Check if "tlt" is in the apps array
+      const hasTLTApp = user.apps.includes('tlt');
+
+      if (!hasTLTApp) {
+        throw new UnauthorizedException('User does not have access to sign in');
+      }
+      
     // this.usersService.addDevice(user.id, request.headers['user-agent']);
     const token = this.jwtService.sign({ id: user._id });
     return {
